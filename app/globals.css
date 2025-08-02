@@ -14,10 +14,6 @@
   --breakpoint-2xl: 1400px; /*laptop 15 inch (my laptop)*/
   --breakpoint-3xl: 1600px; /*laptop 16 inch*/
 
-
-
-
-
 }
 
 
@@ -49,6 +45,12 @@
     @apply p-2;
     @apply rounded-xl;
     @apply cursor-pointer;
+  }
+
+  .rectangle-box{
+    @apply flex flex-col gap-6 justify-center items-center;
+    @apply bg-green-200 ;
+    @apply p-5 rounded-xl;
   }
 
 }
