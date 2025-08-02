@@ -1,7 +1,11 @@
-'use client';
+'use client'
+import React from 'react'
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Button from '../components/Button';
 
-export default function Home() {
+export default function page() {
+  const router = useRouter();
   const [message, setMessage] = useState('');
 
   useEffect(() => {
@@ -18,14 +22,17 @@ export default function Home() {
         }
       })
       .catch((error) => console.error('Error:', error));
-  }, []);
+  }, [])
 
 
+  const handleGoBack = () => {
+    router.push('/'); // Path ke page2.jsx
+  }
 
-  return (
-    <div>
-      <h1>{message ? message : 'Loading...'}</h1>
-    </div>
-  );
+    return (
+        <div className='container'>
+            <h1>{message ? message : "Loading..."}</h1>
+            <Button text={"go back"} onClick={handleGoBack}></Button>
+        </div>
+  )
 }
-
