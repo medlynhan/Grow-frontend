@@ -7,13 +7,14 @@
 :root {
   --white: #ffffff;
   --light-yellow : #ffffea;
-  --dark-yellow : #ffffcf;
-  --light-green-1 : #cdebc5;
-  --light-green-2 : #b6e3c7;
+  --dark-yellow : #fcfcc2;
+  --light-green-1 :  #bcddb4;
+  --light-green-2 : #b4d5c0;
   --medium-green : #6ca5a0;
   --dark-green : #217566;
   --gray : #d9d9d9;
   --black: #06392c;
+  --red :
 }
 
 @theme {
@@ -62,7 +63,7 @@
   body {
     @apply bg-yellow-200 w-screen overflow-x-hidden scroll-smooth w-screen; /*base styling*/
     @apply flex flex-col justify-start items-start; /*flex*/
-    @apply text-sm font-sans text-left; /*font*/
+    @apply text-xs font-sans text-justify; /*font*/
     /* @apply border-2 border-yellow-400; border */
     @apply font-display font-medium;
 
@@ -78,7 +79,7 @@
 @layer components {
 
   .container{
-    @apply flex flex-col gap-10 py-30 px-10 min-w-full items-center justify-center;
+    @apply flex flex-col gap-10 py-30 px-10 min-w-full items-start justify-start;
     /* @apply border border-3 border-blue-400; */
   }
 
@@ -98,10 +99,10 @@
   }
 
 
-  .rectangle-box{
-    @apply flex flex-col gap-6 justify-center items-center;
-    @apply bg-green-200 ;
-    @apply p-5 rounded-xl;
+  .box{
+    @apply flex flex-row justify-start items-center;
+    @apply bg-green-400 text-yellow-200 w-full;
+    @apply p-2 rounded-xl gap-2;
   }
 
   .navbar{
@@ -116,7 +117,7 @@
 
 @layer utilities {
   ::selection {
-    background-color: var(--yellow); 
-    color: var(--black); 
+    background-color: var(--dark-green); 
+    color: var(--light-yellow); 
   }
 }
