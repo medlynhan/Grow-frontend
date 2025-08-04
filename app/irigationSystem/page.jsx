@@ -7,6 +7,7 @@ import ScheduleBox from '../components/ScheduleBox';
 import Image from 'next/image'
 import { IoIosArrowDown } from "react-icons/io";
 import { GoAlertFill } from "react-icons/go";
+import Navbar from '../components/Navbar';
 
 export default function page() {
   const router = useRouter();
@@ -27,20 +28,27 @@ export default function page() {
   }
 
     return (
-        <div className='container md:py-30 md:px-25'>
-            <div className='flex flex-row justify-start items-end'>
-              <Image src="/watering.png" width={65} height={65} alt="sistem irigasi"></Image>
-              <h1 className='text-xl md:text-3xl font-semibold'>Prediksi Kebutuhan Air Tanaman</h1>
+        <div className='container md:py-30 md:px-25 border'>
+            <Navbar />
+            <div className='flex flex-col gap-6'>
+              <div className='flex flex-row justify-start items-end'>
+                <Image src="/watering.png" width={65} height={65} alt="sistem irigasi"></Image>
+                <h1 className='text-xl md:text-3xl font-semibold'>Rekomendasi Sistem Irigasi</h1>
+              </div>
+              <p className='text-sm md:text-base'>Yuk, prediksi kebutuhan air tanaman berdasarkan cuaca dan kelembapan tanah kamu 5 hari kedepan !</p>
             </div>
-            <p>Yuk, prediksi kebutuhan air tanaman berdasarkan cuaca dan kelembapan tanah 5 hari kedepan !</p>
             <div className='w-full flex flex-col gap-10 md:flex-row'>
               
               <div className='box bg-[var(--light-green-1)] gap-4 px-4 flex-col text-[var(--dark-green)] w-full md:w-[40%]'>
                 <div className='flex flex-row justify-start w-full items-center gap-2'>
-                  <GoAlertFill className='text-3xl md:text-4xl text-[var(--dark-yellow)] '/>
-                  <p className='text-base md:text-lg font-semibold'>Peringatan !</p>
+                  <GoAlertFill className='text-base md:text-lg text-[var(--dark-green)] '/>
+                  <p className='text-base md:text-lg font-semibold '>Peringatan !</p>
                 </div>
-                <p className='w-full'>Kelembapan tanah di ladang padi 2 <span className="bg-[var(--dark-yellow)] rounded-lg px-1">20 % di bawah batas aman 60 %</span>.</p>
+                <ul className='list-disc w-[90%] space-y-2'>
+                  <li className='w-full '><span className=' bg-[var(--dark-yellow)] px-2 rounded-sm'>Ladang padi 2 :</span> kelembapan tanah 20 % di bawah batas aman 60 %</li>
+                  <li className='w-full '><span className=' bg-[var(--dark-yellow)] px-2 rounded-sm'>Ladang padi 3 :</span> kelembapan tanah 5 % di atas batas aman 60 %</li>
+                </ul>
+                
               </div>
               
               <div className='flex flex-col gap-2 w-full '>
@@ -48,7 +56,7 @@ export default function page() {
                     <p>{value ? value : "Pilih Ladang"}</p>
                     <IoIosArrowDown/>
                   </div>
-                  {isOpen && (<div className='flex flex-col bg-[var(--light-green-2)] rounded-xl cursor-pointer w-[50%] gap-2 md:max-w-[30%] absolute border border-[var(--dark-green)]'>
+                  {isOpen && (<div className='flex flex-col bg-[var(--light-green-2)] rounded-xl cursor-pointer w-[50%] gap-2 md:max-w-[30%] absolute '>
                       <div className='hover:bg-[var(--medium-green)] hover:text-[var(--light-yellow)] p-2 rounded-t-xl' onClick={() => setChosenValue("ladang padi 1")}>
                           <p>ladang padi 1</p>
                       </div>
@@ -68,8 +76,8 @@ export default function page() {
               </div>
 
             </div>
-            <Button2 text={"ok"} onClick={handleGoBack}></Button2>
-        </div>
+            <Button2 text={"Kembali"} onClick={handleGoBack}></Button2>
+        </div> 
     )
 
 

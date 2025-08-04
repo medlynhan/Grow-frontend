@@ -6,7 +6,6 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className="md:text-sm">
-        <Navbar />
         {children}
       </body>
     </html>

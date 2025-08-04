@@ -5,13 +5,13 @@
 
 
 :root {
-  --white: #ffffff;
-  --light-yellow : #ffffea;
-  --dark-yellow : #fcfcc2;
-  --light-green-1 :  #bcddb4;
-  --light-green-2 : #b4d5c0;
-  --medium-green : #6ca5a0;
-  --dark-green : #217566;
+  --white: rgb(255, 255, 255);
+  --light-yellow : rgb(255, 255, 234);
+  --dark-yellow : rgb(255, 255, 159);
+  --light-green-1 :  rgb(192, 230, 180);
+  --light-green-2 : rgb(184, 223, 198);
+  --medium-green : rgb(80, 150, 143);
+  --dark-green : rgb(19, 117, 99);
   --gray : #d9d9d9;
   --black: #06392c;
   --red :
@@ -37,24 +37,7 @@
   --color-gray-200: var(--gray);
   --color-black : var(--black);
  
-  /*
-    ukuran fotn utk mobile size, tablet dan laptop size menyesuaikkan 
 
-    DEFAULT SIZE :
-    1.  layar xs - sm : text-sm
-    2.  layar md - 3xl : text-base
-
-    Title  :
-    1.  layar xs - sm : text-2xl
-    2.  layar md - 3xl : text-3xl
-
-
-    Subtitle
-    body large
-    body medium text-sm (DEFAULT)
-    body small
-    body super small
-  */
   
 }
 
@@ -106,12 +89,28 @@
   }
 
   .navbar{
-    @apply fixed w-screen bg-green-500 flex flex-row gap-10 justify-between items-center py-5 px-10;
+    @apply fixed absolute top-0 left-0 w-screen bg-green-500 flex flex-row gap-10 justify-between items-center py-5 px-10;
     @apply text-yellow-200 text-2xl;
     @apply shadow-sm shadow-green-400;
   }
 
 
+  .animate-fadeIn{
+    animation: fadeIn 8s ease-in-out infinite;
+  }
+    
+    @keyframes fadeIn {
+      0%,
+      100% {
+        transform: translateY(-5px);
+        
+      }
+      50% {
+        transform: translateY(5px);
+      
+      }
+    }
+  
 }
 
 
