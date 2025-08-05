@@ -74,7 +74,7 @@ export default function Page() {
   }, [email]); // Dependency on email
 
   return (
-    <div className='container md:py-30 md:px-25 border'>
+    <div className='container md:py-30 md:px-25'>
       <Navbar />
       <div className='flex flex-col gap-6'>
         <div className='flex flex-row justify-start items-center gap-2'>
