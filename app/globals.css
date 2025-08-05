@@ -126,7 +126,7 @@
 
 @layer utilities {
   ::selection {
-    background-color: var(--dark-green); 
+    background-color: var(--medium-green); 
     color: var(--light-yellow); 
   }
 }
