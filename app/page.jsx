@@ -1,8 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Button1 from './components/Button1';
-import Button2 from './components/Button2';
 import WhiteButton from './components/WhiteButton';
 import BlackButton from './components/BlackButton';
 
@@ -12,22 +10,32 @@ export default function Home() {
 
   const router = useRouter(); 
 
-  const handleClick = () => {
-    router.push('/irigationSystem'); // Path ke page2.jsx
+  const goToLoginPage = () => {
+    router.push('/login'); 
   };
 
+
+  const goToSignUpPage = () => {
+    router.push('/signUp'); 
+  };
+
+
   return (
-    <div className="container md:py-30 md:px-25  bg-[var(--dark-green)] min-h-screen text-[var(--light-yellow)] overflow-hidden max-h-screen fixed">
-      <div className='flex flex-col gap-4 justify-center items-start w-full z-10 md:w-[50%]'>
-        <h1 className='text-2xl md:text-3xl font-semibold w-full'>Selamat datang di</h1>
-        <Image src="/Grow.png" alt="irigasi" width={120} height={120} className="object-contain" />
-        <p className='text-base md:text-lg'>Atur dan pantau ladangmu dengan mudah dan efisien secara digital</p>
-      </div>
-      <div className='flex flex-row gap-2 z-10'>
-        <WhiteButton></WhiteButton>
-        <BlackButton></BlackButton>
-      </div>
-      <Image src="/landingpage.png" alt="Grow" width={300} height={300} className="w-[150vw] h-[150vh] absolute bottom-0 left-0 animate-fadeIn opacity-0.7 md:w-[40vw] md:left-[60vw] md:animate-none" />
+    <div className="container md:flex-row md:py-30 md:px-25 bg-[var(--dark-green)] text-[var(--light-yellow)] items-center min-h-screen">
+        <div className='flex flex-col pb-2 gap-4 justify-start items-start w-full animate-fadeIn '>
+            <Image src="/Grow.png" alt="irigasi" width={100} height={100} className="xs:w-[10em] md:w-[15em] object-contain z-10" />
+            <div className='z-10'>
+                <p className='text-base md:text-xl'>Atur dan pantau ladangmu </p>
+                <p className='text-base md:text-xl'>dengan mudah dan efisien secara digital</p>
+            </div>
+            <div className='flex flex-row gap-4 z-10 w-full pt-2'>
+                <WhiteButton onClick={goToSignUpPage}/>
+                <BlackButton onClick={goToLoginPage}/>
+            </div>
+        </div>
+        <div className='w-full md:w-[60%] animate-fadeIn '>
+          <Image src={'/landingpage.png'} width={200} height={200} className='rounded-xl object-cover w-full' ></Image>
+        </div>
     </div>
   );
 }

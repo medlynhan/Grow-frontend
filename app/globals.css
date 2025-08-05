@@ -5,17 +5,22 @@
 
 
 :root {
-  --white: rgb(255, 255, 255);
-  --light-yellow : rgb(255, 255, 234);
-  --dark-yellow : rgb(255, 255, 159);
-  --light-green-1 :  rgb(192, 230, 180);
-  --light-green-2 : rgb(184, 223, 198);
-  --medium-green : rgb(80, 150, 143);
-  --dark-green : rgb(19, 117, 99);
-  --gray : #d9d9d9;
-  --black: #06392c;
-  --red :
+
+  --white: #FFFFFF;        /* Warna putih cerah (background) */
+  --light-yellow: #FFFFEA; /* Warna kuning lembut untuk highlight atau alert */
+  --dark-yellow: #fdfdb8; /* Warna kuning lebih gelap untuk aksen */
+  --light-green-1: #c7f0bb; /* Warna hijau terang untuk tombol atau elemen interaktif */
+  --light-green-2: #bbe0c8; /* Warna hijau yang lebih gelap untuk background sekunder */
+  --medium-green: #599c96; /* Warna hijau medium untuk header dan CTA */
+  --dark-green: #217566;   /* Warna hijau gelap untuk teks utama */
+  --gray: #D9D9D9;         /* Warna abu-abu untuk border atau background netral */
+  --black: #06392C;        /* Warna hitam untuk teks gelap */
+  --red: #f15a5a;          /* Warna merah untuk error atau warning */
 }
+
+
+
+
 
 @theme {
   --breakpoint-xs: 0px; /*samsung phone*/
@@ -94,22 +99,27 @@
     @apply shadow-sm shadow-green-400;
   }
 
-
+  .shadow {
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2); /* Bayangan dengan offset horizontal, vertical, dan blur */
+  }
   .animate-fadeIn{
-    animation: fadeIn 8s ease-in-out infinite;
+    animation: fadeIn 3s ease-in-out;
   }
     
     @keyframes fadeIn {
-      0%,
-      100% {
-        transform: translateY(-5px);
+      0% {
+        transform: translateY(-30px);
+        opacity: 0;
         
       }
-      50% {
-        transform: translateY(5px);
-      
+      100% {
+        transform: translateY(0px);
+        opacity: 1;
+        
       }
     }
+  
+
   
 }
 
