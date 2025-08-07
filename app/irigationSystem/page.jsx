@@ -10,15 +10,66 @@ import Navbar from '../components/Navbar';
 import { supabase } from '../lib/supabase';
 import Cookies from 'js-cookie';
 import { GiWateringCan } from "react-icons/gi";
-import { GiPlantRoots } from "react-icons/gi";
+import axios from 'axios';
 
 export default function Page() {
   const router = useRouter();
-  const [email, setEmail] = useState(null);
-  const [fields, setFields] = useState([]); // array for field names
-  const [isOpen, setIsOpen] = useState(false);
-  const [value, setValue] = useState(""); // for selected field value
-  const [errorMsg, setErrorMsg] = useState("");
+  const [email, setEmail] = useState(null); //ambil dr session
+
+  const [isOpen, setIsOpen] = useState(false); //open modal
+
+  const [fields, setFields] = useState([]); // semua kolom field
+  const [selectedField, setSelectedField] = useState(""); // field yang dipilih
+
+  const [value, setValue] = useState(""); // nama field yang dipilih
+
+
+  // State untuk menampung data dari Node.js
+  const [cropType, setCropType] = useState(null);
+  const [optimalMoisture, setOptimalMoisture] = useState(null);
+  const [soilStatus, setSoilStatus] = useState(null);
+  const [soilMoisture, setSoilMoisture] = useState("");
+  const [temperatureFor5Days, setTemperatureFor5Days] = useState([]);
+  const [weatherFor5Days, setWeatherFor5Days] = useState([]);
+  const [waterRequirementFor5Days, setWaterRequirementFor5Days] = useState([]);
+  const [notification, setNotification] = useState("");
+
+  const[loading,setLoading] = useState("true");
+
+
+
+
+  useEffect(() => {
+    console.log('cropType:', cropType, 'Type:', typeof cropType);
+  }, [cropType]);
+
+  useEffect(() => {
+    console.log('optimalMoisture:', optimalMoisture, 'Type:', typeof optimalMoisture);
+  }, [optimalMoisture]);
+
+  useEffect(() => {
+    console.log('soilStatus:', soilStatus, 'Type:', typeof soilStatus);
+  }, [soilStatus]);
+
+  useEffect(() => {
+    console.log('soilMoisture:', soilMoisture, 'Type:', typeof soilMoisture);
+  }, [soilMoisture]);
+
+  useEffect(() => {
+    console.log('temperatureFor5Days:', temperatureFor5Days, 'Type:', typeof temperatureFor5Days);
+  }, [temperatureFor5Days]);
+
+  useEffect(() => {
+    console.log('weatherFor5Days:', weatherFor5Days, 'Type:', typeof weatherFor5Days);
+  }, [weatherFor5Days]);
+
+  useEffect(() => {
+    console.log('waterRequirementFor5Days:', waterRequirementFor5Days, 'Type:', typeof waterRequirementFor5Days);
+  }, [waterRequirementFor5Days]);
+
+  useEffect(() => {
+    console.log('notification:', notification, 'Type:', typeof notification);
+  }, [notification]);
 
   const getCookies = () => {
     const storedEmail = Cookies.get('session');
@@ -37,10 +88,20 @@ export default function Page() {
     console.log("Dropdown is now", isOpen ? "opened" : "closed"); // Debugging dropdown visibility
   };
 
-  const setChosenValue = (fieldName) => {
-    console.log("Chosen field:", fieldName); // Debugging the chosen field
-    setValue(fieldName); // Update selected field value
-    setIsOpen(false); // Close dropdown after selection
+  const setChoosenField = (field) => {
+    console.log("Chosen field:", field.field_name); // Debugging the chosen field
+    
+    setSelectedField({
+      field_name: field.field_name,
+      crop_type: field.crop_type,
+      lat: field.lat,
+      lon: field.lon
+    });
+
+    console.log("Selected field:", selectedField); // Debugging the selected field
+    setValue(field.field_name);  
+
+    setIsOpen(false); 
   };
 
   const fetchFieldData = async () => {
@@ -58,8 +119,73 @@ export default function Page() {
       } else {
         console.log('Fetched field data:', fieldsData); // Debugging the fetched data
         setFields(fieldsData); // Update the state with the fetched data
-        setValue(fieldsData[0]['field-name']); 
+        //Todo : setChoosenField(fieldsData[0])
+        //setChoosenField(fieldsData[0])
       }
+    }
+  };
+
+  const sendToNodeAPI = async () => {
+    if (selectedField) {
+      const { crop_type, lat, lon } = selectedField;
+      
+      const data = {
+        crop_type: crop_type.toUpperCase(),
+        lat: lat,
+        lon: lon
+      };
+
+      try {
+        const response = await axios.post('http://localhost:8000/getFieldData', data);
+        console.log("Response dari Node.js API:", response.data);
+
+        fetchDataFromNode();
+
+        console.log("data", data);
+      } catch (error) {
+        console.error("Terjadi kesalahan saat mengirim data ke Node.js:", error);
+      }
+    }
+  };
+
+  const fetchDataFromNode = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/getProcessedData');
+      
+      // Menyimpan data yang diterima dari Node.js
+      if (response.data.status === 'success') {
+
+      // Menggunakan response.data untuk mengambil data yang tepat
+      setCropType(response.data.data.cropType);
+      setSoilMoisture(response.data.data.soilMoisture);
+      setOptimalMoisture(response.data.data.optimalMoisture);
+      setSoilStatus(response.data.data.soilStatus);
+      setTemperatureFor5Days(response.data.data.temperatureFor5Days);
+      setWeatherFor5Days(response.data.data.weatherFor5Days);
+      setWaterRequirementFor5Days(response.data.data.waterRequirementFor5Days);
+      setNotification(response.data.data.notificationMessage);
+
+      // Menampilkan data yang diterima
+      console.log("Crop Type:", response.data.data.cropType);
+      console.log("Soil Moisture:", response.data.data.soilMoisture);
+      console.log("Optimal Moisture:", response.data.data.optimalMoisture);
+      console.log("Soil Status:", response.data.data.soilStatus);
+      console.log("Notification : ", response.data.data.notificationMessage);
+
+      // Menggunakan map untuk menampilkan data suhu, cuaca, dan kebutuhan air
+      console.log("Temperature for 5 Days:", response.data.data.temperatureFor5Days.map((temp, index) => (
+        `Day ${index + 1}: ${temp}`
+      )));
+      console.log("Weather for 5 Days:", response.data.data.weatherFor5Days.map((weather, index) => (
+        `Day ${index + 1}: ${weather}`
+      )));
+      console.log("Water Requirement for 5 Days:", response.data.data.waterRequirementFor5Days.map((water, index) => (
+        `Day ${index + 1}: ${water}`
+      )));
+
+      }
+    } catch (error) {
+      console.error('Error fetching data from Node.js:', error);
     }
   };
 
@@ -69,37 +195,47 @@ export default function Page() {
 
   useEffect(() => {
     if (email) {
-      fetchFieldData();  // Only call fetchFieldData when email is set
+      fetchFieldData(); 
     }
   }, [email]); // Dependency on email
+
+  useEffect(() => {
+    if (selectedField && selectedField.crop_type && selectedField.lat && selectedField.lon) {
+      sendToNodeAPI();  // Tunggu sampai sendToNodeAPI selesai
+    }
+  }, [selectedField]);
+
 
   return (
     <div className='container md:py-30 md:px-25'>
       <Navbar />
       <div className='flex flex-col gap-6'>
         <div className='flex flex-row justify-start items-center gap-2'>
-          <GiWateringCan className='text-3xl md:text-5xl h-full '/>
-          <h1 className='text-xl md:text-3xl font-semibold  h-full '>Rekomendasi Sistem Irigasi</h1>
+          <GiWateringCan className='text-3xl md:text-5xl h-full text-justify'/>
+          <h1 className='text-2xl md:text-3xl font-semibold  h-full text-juctify '>Sistem Irigasi</h1>
         </div>
         <p className='text-sm md:text-base'>Berikut prediksi kebutuhan air tanaman kamu 5 hari kedepan !</p>
       </div>
 
-      <div className='w-full flex flex-col gap-10 md:flex-row w-full'>
-        <div className='flex-col flex w-full borderb gap-4'>
-        <div className='w-full flex flex-col '>
+      <div className='w-full flex flex-col gap-10 lg:flex-row w-full lg:h-[30em] '>
+
+
+
+        <div className='border flex-col flex w-full  gap-4  h-full '>
+        <div className='w-full flex flex-col gap-2'>
             <div className='w-full'>
-              <div className='flex flex-row border-2 border-[var(--medium-green)] p-2 rounded-xl justify-between cursor-pointer w-[50%] md:w-[40%] gap-2 items-center' onClick={chooseField}>
+              <div className='flex flex-row border-2 border-[var(--medium-green)] p-2 rounded-xl justify-between cursor-pointer w-[55%] gap-2 items-center' onClick={chooseField}>
                 <p>{value ? value : "Pilih Ladang"}</p>
                 <IoIosArrowDown />
               </div>
             </div>
-            <div className='w-full'>
+            <div className='w-full h-full '>
               {isOpen && (
-              <div className='absolute bg-[var(--light-yellow)] border-2 border-[var(--medium-green)] rounded-xl cursor-pointer w-[50%] gap-6 md:max-w-[30%] shadow'>
+              <div className='absolute bg-[var(--light-yellow)] border-2 border-[var(--medium-green)] rounded-xl cursor-pointer w-[55%] gap-6 md:max-w-[30%] shadow'>
                 {fields.length > 0 ? (
                   fields.map((field, index) => (
-                    <div key={index} className={`hover:bg-[var(--light-green-1)] p-2 cursor-pointer ${index === 0 ? 'rounded-t-xl' : index === fields.length - 1 ? 'rounded-b-xl' : ''}`} onClick={() => setChosenValue(field['field-name'])} >
-                      <p>{field['field-name']}</p>
+                    <div key={index} className={`hover:bg-[var(--light-green-1)] p-2 cursor-pointer ${index === 0 ? 'rounded-t-xl' : index === fields.length - 1 ? 'rounded-b-xl' : ''}`} onClick={() => setChoosenField(field)} >
+                      <p>{field.field_name}</p>
                     </div>
                   ))
                 ) : (
@@ -109,33 +245,38 @@ export default function Page() {
               )}
             </div>
         </div>
+        <div className='bg-[#50d71e]  flex flex-row justify-center items-center'>
+          <p className=''>Sedang memuat ...</p>
+        </div>
         
         
-        <div className='box bg-[var(--light-green-1)] gap-4 px-4 flex-col text-[var(--dark-green)]  w-full'>
+        <div className='box  h-full  bg-[var(--light-green-1)] gap-4 px-4 flex-col text-[var(--dark-green)]  w-full hidden'>
           <div className='flex flex-row justify-start w-full items-center gap-2'>
               <FaBell className='text-base md:text-lg text-[var(--dark-green)]' />
               <p className='text-base md:text-lg font-semibold'>Notifikasi</p>
           </div>
             <ul className='list-disc w-[90%] space-y-2'>
-              <li className='w-full font-semibold'> Kelembapan tanah 5% di bawah batas aman 60 %, perhatikan sistem irigasi !</li>
+              <li className='w-full font-semibold'> {notification ? notification : "Siram tanaman anda"}</li>
             </ul>
         </div>
 
 
-        <div className='box grid-cols-3 bg-transparent p-0 gap-4 text-[var(--dark-green)] w-full '>
+        <div className='box  h-full  grid-cols-4 bg-transparent p-0 gap-4 text-[var(--dark-green)] w-full hidden'>
          
           <div className='w-full h-[14em] col-span-2  overflow-hidden '>
             <Image src={'/landingpage.png'} width={200} height={200} className='object-cover w-full h-full rounded-xl'></Image>
           </div>
           
-          <div className='border-2 h-[14em]  border-[var(--medium-green)] rounded-xl col-span-1'>
+          <div className='border-2 h-[14em] min-w-[12em] border-[var(--medium-green)] rounded-xl col-span-2'>
             <div className='w-full p-2'>
                 <p className='text-xs md:text-sm'>Status tanah :</p>
-                <p className='text-sm md:text-lg font-semibold'>Kering</p>
+                <p className='text-sm md:text-lg font-semibold'>{soilStatus ? soilStatus : "Kering"}</p>
             </div>
             <div className='w-full p-2'>
                 <p className=''>Persentase kelembapan :</p>
-                <p className='text-sm md:text-lg font-semibold'>32%</p>
+                <p className='text-sm md:text-lg font-semibold text-left'>
+                  {soilMoisture ? soilMoisture : "45,5"} / {optimalMoisture && optimalMoisture.min ? optimalMoisture.min : "60"}-{optimalMoisture && optimalMoisture.max ? optimalMoisture.max : "80"}%
+                </p>
             </div>
           </div>
 
@@ -144,19 +285,49 @@ export default function Page() {
 
       </div>
         
-        
 
 
+        <div className='  flex flex-col gap-2 w-full  h-full overflow-y-auto '>
+          
+          
 
-        <div className='flex flex-col gap-2 w-full'>
+          <div className='flex flex-col gap-2 hidden'>
+            {waterRequirementFor5Days && temperatureFor5Days && weatherFor5Days &&
+              waterRequirementFor5Days.map((water, index) => {
+              
+                const temperature = temperatureFor5Days[index]; // Ambil suhu yang sesuai berdasarkan indeks
+                const weather = weatherFor5Days[index]; // Ambil kondisi cuaca pertama dari objek conditions
 
-          <ScheduleBox weather={"sunny"} day={"Senin"} date={"04-08-2025"} />
-          <ScheduleBox weather={"windy"} day={"Selasa"} date={"05-08-2025"} />
-          <ScheduleBox weather={"normal"} day={"Rabu"} date={"06-08-2025"} />
-          <ScheduleBox weather={"rainy"} day={"Kamis"} date={"07-08-2025"} />
-          <ScheduleBox weather={"sunny"} day={"Jumat"} date={"08-08-2025"} />
+                return (
+                  <ScheduleBox 
+                    key={index} 
+                    weather={weather.conditions[0]} 
+                    temperatureMin={temperature.min} 
+                    temperatureMax={temperature.max} 
+                    date={water.date} 
+                    waterReq={water.prediction[0]} // Mengirimkan prediksi air
+                  />
+                );
+              })
+            }
+            
+                  <ScheduleBox 
+                    key={1} 
+                    weather={"SUNNY"} 
+                    temperatureMin={"10"} 
+                    temperatureMax={"20"} 
+                    date={"2020-04-07"} 
+                    waterReq={"3.32"} 
+                  />
+
+                  
+          </div>
         </div>
+
+
       </div>
+
+      
 
       <Button2 text={"Kembali"} onClick={handleGoBack} />
     </div>
