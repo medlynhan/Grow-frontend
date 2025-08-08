@@ -11,6 +11,7 @@ import { supabase } from '../lib/supabase';
 import Cookies from 'js-cookie';
 import { GiWateringCan } from "react-icons/gi";
 import axios from 'axios';
+import { PiLeafFill } from "react-icons/pi";
 
 export default function Page() {
   const router = useRouter();
@@ -100,7 +101,6 @@ export default function Page() {
 
     console.log("Selected field:", selectedField); // Debugging the selected field
     setValue(field.field_name);  
-
     setIsOpen(false); 
   };
 
@@ -120,7 +120,8 @@ export default function Page() {
         console.log('Fetched field data:', fieldsData); // Debugging the fetched data
         setFields(fieldsData); // Update the state with the fetched data
         //Todo : setChoosenField(fieldsData[0])
-        //setChoosenField(fieldsData[0])
+        
+        setChoosenField(fieldsData[0]);
       }
     }
   };
@@ -135,15 +136,18 @@ export default function Page() {
         lon: lon
       };
 
+      setLoading(true);
+
       try {
         const response = await axios.post('http://localhost:8000/getFieldData', data);
         console.log("Response dari Node.js API:", response.data);
 
-        fetchDataFromNode();
-
+        await fetchDataFromNode();
+        setLoading(false);
         console.log("data", data);
       } catch (error) {
         console.error("Terjadi kesalahan saat mengirim data ke Node.js:", error);
+        setLoading(false);
       }
     }
   };
@@ -206,92 +210,119 @@ export default function Page() {
   }, [selectedField]);
 
 
+  const getCropType = (cropType) => {
+    switch (cropType) {
+      case 'RICE':
+        return "Padi";
+      case 'TOMATO':
+        return "Tomat";
+      case 'CABBAGE':
+        return "Kubis";
+      case 'MAIZE':
+        return "Jagung";
+    }
+  }
+
+  const cropTypeTranslate = getCropType(cropType);
+
+
   return (
-    <div className='container md:py-30 md:px-25'>
+    <div className='container md:py-30 md:px-25 '>
       <Navbar />
-      <div className='flex flex-col gap-6'>
-        <div className='flex flex-row justify-start items-center gap-2'>
-          <GiWateringCan className='text-3xl md:text-5xl h-full text-justify'/>
-          <h1 className='text-2xl md:text-3xl font-semibold  h-full text-juctify '>Sistem Irigasi</h1>
-        </div>
-        <p className='text-sm md:text-base'>Berikut prediksi kebutuhan air tanaman kamu 5 hari kedepan !</p>
+      {loading && (
+      <div className='absolute z-10 top-0 left-0 landscape:top-[15em] w-full text-[var(--dark-green)]  flex flex-col gap-4 justify-center items-center h-full'>
+        <PiLeafFill className='text-2xl lg:text-3xl animate-rotateIn '/>
+        <p className=''>Sedang memuat ...</p>
       </div>
-
-      <div className='w-full flex flex-col gap-10 lg:flex-row w-full lg:h-[30em] '>
-
+      )}
 
 
-        <div className='border flex-col flex w-full  gap-4  h-full '>
-        <div className='w-full flex flex-col gap-2'>
-            <div className='w-full'>
-              <div className='flex flex-row border-2 border-[var(--medium-green)] p-2 rounded-xl justify-between cursor-pointer w-[55%] gap-2 items-center' onClick={chooseField}>
-                <p>{value ? value : "Pilih Ladang"}</p>
-                <IoIosArrowDown />
+      
+      <div className='  w-full flex flex-col gap-10 lg:flex-row w-full lg:h-[40em] '>
+
+      <div className='flex flex-col gap-6 '>
+          <div className='flex flex-col gap-6 '>
+              <div className='flex flex-row justify-start items-center gap-2'>
+                <GiWateringCan className='text-3xl md:text-5xl h-full text-justify  text-[var(--dark-green)]'/>
+                <h1 className='text-2xl md:text-3xl font-semibold  h-full text-juctify text-[var(--dark-green)]'>Sistem Irigasi</h1>
               </div>
-            </div>
-            <div className='w-full h-full '>
-              {isOpen && (
-              <div className='absolute bg-[var(--light-yellow)] border-2 border-[var(--medium-green)] rounded-xl cursor-pointer w-[55%] gap-6 md:max-w-[30%] shadow'>
-                {fields.length > 0 ? (
-                  fields.map((field, index) => (
-                    <div key={index} className={`hover:bg-[var(--light-green-1)] p-2 cursor-pointer ${index === 0 ? 'rounded-t-xl' : index === fields.length - 1 ? 'rounded-b-xl' : ''}`} onClick={() => setChoosenField(field)} >
-                      <p>{field.field_name}</p>
+              <p className='text-sm md:text-base'>Berikut prediksi kebutuhan air tanaman kamu 5 hari kedepan !</p>
+          </div>
+
+          <div className=' flex-col flex w-full  gap-4  h-full  xl:w-[40em] '>
+              <div className='w-full flex flex-col gap-2'>
+                  <div className='w-full'>
+                    <div className='flex flex-row border-2 border-[var(--medium-green)] p-2 rounded-xl justify-between cursor-pointer w-[55%] gap-2 items-center' onClick={chooseField}>
+                      <p>{value ? value : "Pilih Ladang"}</p>
+                      <IoIosArrowDown />
                     </div>
-                  ))
-                ) : (
-                  <p className='p-2'>Belum ada ladang</p>
-                )}
+                  </div>
+                  <div className='w-full h-full '>
+                    {isOpen && (
+                    <div className='absolute bg-[var(--light-yellow)] border-2 border-[var(--medium-green)] rounded-xl cursor-pointer w-[55%] gap-6 md:max-w-[30%] shadow'>
+                      {fields.length > 0 ? (
+                        fields.map((field, index) => (
+                          <div key={index} className={`hover:bg-[var(--light-green-1)] p-2 cursor-pointer ${index === 0 ? 'rounded-t-xl' : index === fields.length - 1 ? 'rounded-b-xl' : ''}`} onClick={() => setChoosenField(field)} >
+                            <p>{field.field_name}</p>
+                          </div>
+                        ))
+                      ) : (
+                        <p className='p-2'>Belum ada ladang</p>
+                      )}
+                    </div>
+                    )}
+                  </div>
+              </div>
+
+              
+              {!loading && (
+              <div className='box  h-full  bg-[var(--light-green-1)] gap-4 px-4 flex-col text-[var(--black)]  w-full '>
+                <div className='flex flex-row justify-start w-full items-center gap-2'>
+                    <FaBell className='text-base md:text-lg text-[var(--dark-green)]' />
+                    <p className='text-base md:text-lg font-semibold text-[var(--dark-green)]'>Notifikasi</p>
+                </div>
+                  <ul className='list-disc w-[90%] space-y-2'>
+                    <li className='w-full text-[var(--dark-green)]'> {notification ? notification : "Siram tanaman anda"}</li>
+                  </ul>
               </div>
               )}
-            </div>
-        </div>
-        <div className='bg-[#50d71e]  flex flex-row justify-center items-center'>
-          <p className=''>Sedang memuat ...</p>
-        </div>
-        
-        
-        <div className='box  h-full  bg-[var(--light-green-1)] gap-4 px-4 flex-col text-[var(--dark-green)]  w-full hidden'>
-          <div className='flex flex-row justify-start w-full items-center gap-2'>
-              <FaBell className='text-base md:text-lg text-[var(--dark-green)]' />
-              <p className='text-base md:text-lg font-semibold'>Notifikasi</p>
+
+              {!loading && (
+              <div className='box h-full  grid-cols-4 bg-transparent p-0 gap-4 text-[var(--dark-green)] w-full  '>
+              
+                <div className='w-full h-[14em] col-span-2  overflow-hidden '>
+                  <Image src={'/landingpage.png'} width={200} height={200} className='object-cover w-full h-full rounded-xl'></Image>
+                </div>
+                
+                <div className='border-2 h-[14em] min-w-[12em] border-[var(--medium-green)]  rounded-xl col-span-2 text-[var(--black)]'>
+                  <div className='w-full p-2'>
+                      <p className='md:text-sm  font-semibold'>Jenis tanaman :</p>
+                      <p className='md:text-sm  '>{cropTypeTranslate ? cropTypeTranslate : "jagung"}</p>
+                  </div>           
+                  <div className='w-full p-2'>
+                      <p className='md:text-sm  font-semibold'>Status tanah :</p>
+                      <p className='md:text-sm  '>{soilStatus ? soilStatus : "Kering"}</p>
+                  </div>
+                  <div className='w-full p-2'>
+                      <p className='md:text-sm font-semibold'>Persentase kelembapan :</p>
+                      <p className='md:text-sm    text-left'>
+                        {soilMoisture ? soilMoisture : "45,5"} / {optimalMoisture && optimalMoisture.min ? optimalMoisture.min : "60"}-{optimalMoisture && optimalMoisture.max ? optimalMoisture.max : "80"}%
+                      </p>
+                  </div>
+                </div>
+
+              </div>
+              )}
+
           </div>
-            <ul className='list-disc w-[90%] space-y-2'>
-              <li className='w-full font-semibold'> {notification ? notification : "Siram tanaman anda"}</li>
-            </ul>
-        </div>
+      </div>     
 
-
-        <div className='box  h-full  grid-cols-4 bg-transparent p-0 gap-4 text-[var(--dark-green)] w-full hidden'>
-         
-          <div className='w-full h-[14em] col-span-2  overflow-hidden '>
-            <Image src={'/landingpage.png'} width={200} height={200} className='object-cover w-full h-full rounded-xl'></Image>
-          </div>
+        {!loading && (
+        <div className='  flex flex-col gap-2 w-full p-4 lg:p-10 rounded-xl bg-[var(--medium-green)]  h-full overflow-y-auto '>
           
-          <div className='border-2 h-[14em] min-w-[12em] border-[var(--medium-green)] rounded-xl col-span-2'>
-            <div className='w-full p-2'>
-                <p className='text-xs md:text-sm'>Status tanah :</p>
-                <p className='text-sm md:text-lg font-semibold'>{soilStatus ? soilStatus : "Kering"}</p>
-            </div>
-            <div className='w-full p-2'>
-                <p className=''>Persentase kelembapan :</p>
-                <p className='text-sm md:text-lg font-semibold text-left'>
-                  {soilMoisture ? soilMoisture : "45,5"} / {optimalMoisture && optimalMoisture.min ? optimalMoisture.min : "60"}-{optimalMoisture && optimalMoisture.max ? optimalMoisture.max : "80"}%
-                </p>
-            </div>
-          </div>
-
-        </div>
-
-
-      </div>
+          <h1 className='pb-2 text-base ms:text-lg text-[var(--white)] font-semibold'>Hasil prediksi kebutuhan air</h1>
         
-
-
-        <div className='  flex flex-col gap-2 w-full  h-full overflow-y-auto '>
-          
-          
-
-          <div className='flex flex-col gap-2 hidden'>
+          <div className='flex flex-col gap-2 '>
             {waterRequirementFor5Days && temperatureFor5Days && weatherFor5Days &&
               waterRequirementFor5Days.map((water, index) => {
               
@@ -311,25 +342,29 @@ export default function Page() {
               })
             }
             
-                  <ScheduleBox 
+                  {/* <ScheduleBox 
                     key={1} 
                     weather={"SUNNY"} 
                     temperatureMin={"10"} 
                     temperatureMax={"20"} 
                     date={"2020-04-07"} 
                     waterReq={"3.32"} 
-                  />
+                  /> */}
 
                   
           </div>
+        
         </div>
+        )}
 
 
       </div>
+      {!loading && (
+      <div className=''>
+            <Button2 text={"Kembali"} onClick={handleGoBack} />
+      </div>
+      )}
 
-      
-
-      <Button2 text={"Kembali"} onClick={handleGoBack} />
     </div>
   );
 }
