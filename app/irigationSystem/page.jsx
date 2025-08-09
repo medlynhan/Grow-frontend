@@ -251,7 +251,7 @@ export default function Page() {
 
             <div className=' grid-cols grid grid-rows-7 w-full row-span-3 place-content-between h-full gap-6 xl:w-[40em] '>
                 <div className='w-full flex flex-col gap-2 row-span-1'>
-                    <div className='xl:w-[40em] '>
+                    <div className='min-w-[20em] xl:w-[40em] '>
                       <div className='flex flex-row border-2 border-[var(--medium-green)] p-2 rounded-xl justify-between cursor-pointer w-[50%] gap-2 items-center' onClick={chooseField}>
                         <p className='w-full'>{value ? value : "Pilih Ladang"}</p>
                         <IoIosArrowDown />
