@@ -230,141 +230,141 @@ export default function Page() {
     <div className='container md:py-30 md:px-25 '>
       <Navbar />
       {loading && (
-      <div className='absolute z-10 top-0 left-0 landscape:top-[15em] w-full text-[var(--dark-green)]  flex flex-col gap-4 justify-center items-center h-full'>
+      <div className='absolute z-10 top-0 left-0 landscape:top-[10em] w-full text-[var(--dark-green)]  flex flex-col gap-4 justify-center items-center h-full'>
         <PiLeafFill className='text-2xl lg:text-3xl animate-rotateIn '/>
-        <p className=''>Sedang memuat ...</p>
+        <p className=''>Memuat ...</p>
       </div>
       )}
 
 
       
-      <div className='  w-full flex flex-col gap-10 lg:flex-row w-full lg:h-[40em] '>
+      <div className='  w-full flex flex-col gap-10 lg:flex-row w-full lg:h-[75vh] '>
 
-      <div className='flex flex-col gap-6 '>
-          <div className='flex flex-col gap-6 '>
-              <div className='flex flex-row justify-start items-center gap-2'>
-                <GiWateringCan className='text-3xl md:text-5xl h-full text-justify  text-[var(--dark-green)]'/>
-                <h1 className='text-2xl md:text-3xl font-semibold  h-full text-juctify text-[var(--dark-green)]'>Sistem Irigasi</h1>
-              </div>
-              <p className='text-sm md:text-base'>Berikut prediksi kebutuhan air tanaman kamu 5 hari kedepan !</p>
-          </div>
+        <div className='grid grid-cols gap-6 grid-rows-4  place-content-between'>
+            <div className='flex flex-col gap-2  row-span-1'>
+                <div className='flex flex-row justify-start items-center gap-2 h-full'>
+                  <GiWateringCan className='text-3xl md:text-5xl text-justify  text-[var(--dark-green)]'/>
+                  <h1 className='text-2xl md:text-3xl font-semibold  text-juctify text-[var(--dark-green)]'>Sistem Irigasi</h1>
+                </div>
+                <p className='text-sm md:text-base'>Berikut prediksi kebutuhan air tanaman kamu 5 hari kedepan !</p>
+            </div>
 
-          <div className=' flex-col flex w-full  gap-4  h-full  xl:w-[40em] '>
-              <div className='w-full flex flex-col gap-2'>
-                  <div className='w-full'>
-                    <div className='flex flex-row border-2 border-[var(--medium-green)] p-2 rounded-xl justify-between cursor-pointer w-[55%] gap-2 items-center' onClick={chooseField}>
-                      <p>{value ? value : "Pilih Ladang"}</p>
-                      <IoIosArrowDown />
+            <div className=' grid-cols grid grid-rows-7 w-full row-span-3 place-content-between h-full gap-6 xl:w-[40em] '>
+                <div className='w-full flex flex-col gap-2 row-span-1'>
+                    <div className='xl:w-[40em] '>
+                      <div className='flex flex-row border-2 border-[var(--medium-green)] p-2 rounded-xl justify-between cursor-pointer w-[50%] gap-2 items-center' onClick={chooseField}>
+                        <p className='w-full'>{value ? value : "Pilih Ladang"}</p>
+                        <IoIosArrowDown />
+                      </div>
                     </div>
-                  </div>
-                  <div className='w-full h-full '>
-                    {isOpen && (
-                    <div className='absolute bg-[var(--light-yellow)] border-2 border-[var(--medium-green)] rounded-xl cursor-pointer w-[55%] gap-6 md:max-w-[30%] shadow'>
-                      {fields.length > 0 ? (
-                        fields.map((field, index) => (
-                          <div key={index} className={`hover:bg-[var(--light-green-1)] p-2 cursor-pointer ${index === 0 ? 'rounded-t-xl' : index === fields.length - 1 ? 'rounded-b-xl' : ''}`} onClick={() => setChoosenField(field)} >
-                            <p>{field.field_name}</p>
-                          </div>
-                        ))
-                      ) : (
-                        <p className='p-2'>Belum ada ladang</p>
+                    <div className='w-full '>
+                      {isOpen && (
+                      <div className='absolute bg-[var(--light-yellow)] border-2 border-[var(--medium-green)] rounded-xl cursor-pointer w-[55%] gap-6 md:max-w-[30%] shadow'>
+                        {fields.length > 0 ? (
+                          fields.map((field, index) => (
+                            <div key={index} className={`hover:bg-[var(--light-green-1)] p-2 cursor-pointer ${index === 0 ? 'rounded-t-xl' : index === fields.length - 1 ? 'rounded-b-xl' : ''}`} onClick={() => setChoosenField(field)} >
+                              <p>{field.field_name}</p>
+                            </div>
+                          ))
+                        ) : (
+                          <p className='p-2'>Belum ada ladang</p>
+                        )}
+                      </div>
                       )}
                     </div>
-                    )}
-                  </div>
-              </div>
-
-              
-              {!loading && (
-              <div className='box  h-full  bg-[var(--light-green-1)] gap-4 px-4 flex-col text-[var(--black)]  w-full '>
-                <div className='flex flex-row justify-start w-full items-center gap-2'>
-                    <FaBell className='text-base md:text-lg text-[var(--dark-green)]' />
-                    <p className='text-base md:text-lg font-semibold text-[var(--dark-green)]'>Notifikasi</p>
                 </div>
-                  <ul className='list-disc w-[90%] space-y-2'>
-                    <li className='w-full text-[var(--dark-green)]'> {notification ? notification : "Siram tanaman anda"}</li>
-                  </ul>
-              </div>
-              )}
 
-              {!loading && (
-              <div className='box h-full  grid-cols-4 bg-transparent p-0 gap-4 text-[var(--dark-green)] w-full  '>
-              
-                <div className='w-full h-[14em] col-span-2  overflow-hidden '>
-                  <Image src={'/landingpage.png'} width={200} height={200} className='object-cover w-full h-full rounded-xl'></Image>
-                </div>
                 
-                <div className='border-2 h-[14em] min-w-[12em] border-[var(--medium-green)]  rounded-xl col-span-2 text-[var(--black)]'>
-                  <div className='w-full p-2'>
-                      <p className='md:text-sm  font-semibold'>Jenis tanaman :</p>
-                      <p className='md:text-sm  '>{cropTypeTranslate ? cropTypeTranslate : "jagung"}</p>
-                  </div>           
-                  <div className='w-full p-2'>
-                      <p className='md:text-sm  font-semibold'>Status tanah :</p>
-                      <p className='md:text-sm  '>{soilStatus ? soilStatus : "Kering"}</p>
+                {!loading && (
+                <div className='box bg-[var(--light-green-1)] gap-4 px-4 flex-col text-[var(--black)] h-full  row-span-3'>
+                  <div className='flex flex-row justify-start w-full items-center gap-2'>
+                      <FaBell className='text-base md:text-lg text-[var(--dark-green)]' />
+                      <p className='text-base md:text-lg font-semibold text-[var(--dark-green)]'>Notifikasi</p>
                   </div>
-                  <div className='w-full p-2'>
-                      <p className='md:text-sm font-semibold'>Persentase kelembapan :</p>
-                      <p className='md:text-sm    text-left'>
-                        {soilMoisture ? soilMoisture : "45,5"} / {optimalMoisture && optimalMoisture.min ? optimalMoisture.min : "60"}-{optimalMoisture && optimalMoisture.max ? optimalMoisture.max : "80"}%
-                      </p>
-                  </div>
+                    <ul className='list-disc w-[90%] space-y-2'>
+                      <li className='w-full text-[var(--dark-green)]'> {notification ? notification : "Siram tanaman anda"}</li>
+                    </ul>
                 </div>
+                )}
 
-              </div>
-              )}
-
-          </div>
-      </div>     
-
-        {!loading && (
-        <div className='  flex flex-col gap-2 w-full p-4 lg:p-10 rounded-xl bg-[var(--medium-green)]  h-full overflow-y-auto '>
-          
-          <h1 className='pb-2 text-base ms:text-lg text-[var(--white)] font-semibold'>Hasil prediksi kebutuhan air</h1>
-        
-          <div className='flex flex-col gap-2 '>
-            {waterRequirementFor5Days && temperatureFor5Days && weatherFor5Days &&
-              waterRequirementFor5Days.map((water, index) => {
-              
-                const temperature = temperatureFor5Days[index]; // Ambil suhu yang sesuai berdasarkan indeks
-                const weather = weatherFor5Days[index]; // Ambil kondisi cuaca pertama dari objek conditions
-
-                return (
-                  <ScheduleBox 
-                    key={index} 
-                    weather={weather.conditions[0]} 
-                    temperatureMin={temperature.min} 
-                    temperatureMax={temperature.max} 
-                    date={water.date} 
-                    waterReq={water.prediction[0]} // Mengirimkan prediksi air
-                  />
-                );
-              })
-            }
-            
-                  {/* <ScheduleBox 
-                    key={1} 
-                    weather={"SUNNY"} 
-                    temperatureMin={"10"} 
-                    temperatureMax={"20"} 
-                    date={"2020-04-07"} 
-                    waterReq={"3.32"} 
-                  /> */}
-
+                {!loading && (
+                <div className='box grid grid-cols-5 bg-transparent p-0 gap-4 text-[var(--dark-green)] h-full  row-span-4 w-full'>
+                
+                  <div className='col-span-2 h-full w-full  overflow-hidden '>
+                    <Image src={'/fieldPhoto.png'} width={200} height={200} className='object-cover object-fit w-full h-full rounded-xl'></Image>
+                  </div>
                   
+                  <div className='border-2 w-full h-full border-[var(--medium-green)]  rounded-xl col-span-3 text-[var(--black)]'>         
+                    <div className='w-full p-1'>
+                        <p className='md:text-sm  font-semibold'>Jenis tanaman :</p>
+                        <p className='md:text-sm  '>{cropTypeTranslate ? cropTypeTranslate : ""}</p>
+                    </div>
+                    <div className='w-full p-1'>
+                        <p className='md:text-sm  font-semibold'>Status tanah :</p>
+                        <p className='md:text-sm  '>{soilStatus ? soilStatus : "Kering"}</p>
+                    </div>
+                    <div className='w-full p-1'>
+                        <p className='md:text-sm font-semibold'>Persentase kelembapan :</p>
+                        <p className='md:text-sm    text-left'>
+                          {soilMoisture ? soilMoisture : "45,5"} / {optimalMoisture && optimalMoisture.min ? optimalMoisture.min : "60"}-{optimalMoisture && optimalMoisture.max ? optimalMoisture.max : "80"}%
+                        </p>
+                    </div>
+                  </div>
+
+                </div>
+                )}
+
+            </div>
+        </div>     
+
+          {!loading && (
+          <div className='  flex flex-col gap-2 w-full p-4 lg:p-10 rounded-xl bg-[var(--medium-green)]  h-full overflow-y-auto'>
+            
+            <h1 className='pb-2 text-base ms:text-lg text-[var(--white)] font-semibold'>Hasil prediksi kebutuhan air</h1>
+          
+            <div className='flex flex-col gap-2 '>
+              {waterRequirementFor5Days && temperatureFor5Days && weatherFor5Days &&
+                waterRequirementFor5Days.map((water, index) => {
+                
+                  const temperature = temperatureFor5Days[index]; // Ambil suhu yang sesuai berdasarkan indeks
+                  const weather = weatherFor5Days[index]; // Ambil kondisi cuaca pertama dari objek conditions
+
+                  return (
+                    <ScheduleBox 
+                      key={index} 
+                      weather={weather.conditions[0]} 
+                      temperatureMin={temperature.min} 
+                      temperatureMax={temperature.max} 
+                      date={water.date} 
+                      waterReq={water.prediction[0]} // Mengirimkan prediksi air
+                    />
+                  );
+                })
+              }
+              
+                    {/* <ScheduleBox 
+                      key={1} 
+                      weather={"SUNNY"} 
+                      temperatureMin={"10"} 
+                      temperatureMax={"20"} 
+                      date={"2020-04-07"} 
+                      waterReq={"3.32"} 
+                    /> */}
+
+                    
+            </div>
+          
           </div>
-        
+          )}
+
+
+        </div>
+        {!loading && (
+        <div className='  '>
+              <Button2 text={"Kembali"} onClick={handleGoBack} />
         </div>
         )}
 
-
       </div>
-      {!loading && (
-      <div className=''>
-            <Button2 text={"Kembali"} onClick={handleGoBack} />
-      </div>
-      )}
-
-    </div>
   );
 }
