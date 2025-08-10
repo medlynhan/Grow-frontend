@@ -12,6 +12,7 @@ import Cookies from 'js-cookie';
 import { GiWateringCan } from "react-icons/gi";
 import axios from 'axios';
 import { PiLeafFill } from "react-icons/pi";
+import MapboxMap from '../components/MapboxMap';
 
 export default function Page() {
   const router = useRouter();
@@ -252,7 +253,7 @@ export default function Page() {
             <div className=' grid-cols grid grid-rows-7 w-full row-span-3 place-content-between h-full gap-6 xl:w-[40em] '>
                 <div className='w-full flex flex-col gap-2 row-span-1'>
                     <div className='min-w-[20em] xl:w-[40em] '>
-                      <div className='flex flex-row border-2 border-[var(--medium-green)] p-2 rounded-xl justify-between cursor-pointer w-[50%] gap-2 items-center' onClick={chooseField}>
+                      <div className='flex flex-row border-2 border-[var(--light-green-2)] p-2 rounded-xl justify-between cursor-pointer w-[50%] gap-2 items-center' onClick={chooseField}>
                         <p className='w-full'>{value ? value : "Pilih Ladang"}</p>
                         <IoIosArrowDown />
                       </div>
@@ -291,10 +292,10 @@ export default function Page() {
                 <div className='box grid grid-cols-5 bg-transparent p-0 gap-4 text-[var(--dark-green)] h-full  row-span-4 w-full'>
                 
                   <div className='col-span-2 h-full w-full  overflow-hidden '>
-                    <Image src={'/fieldPhoto.png'} width={200} height={200} className='object-cover object-fit w-full h-full rounded-xl'></Image>
+                      <MapboxMap/>
                   </div>
                   
-                  <div className='border-2 w-full h-full border-[var(--medium-green)]  rounded-xl col-span-3 text-[var(--black)]'>         
+                  <div className='border-2 w-full h-full border-[var(--light-green-2)]  rounded-xl col-span-3 text-[var(--black)]'>         
                     <div className='w-full p-1'>
                         <p className='md:text-sm  font-semibold'>Jenis tanaman :</p>
                         <p className='md:text-sm  '>{cropTypeTranslate ? cropTypeTranslate : ""}</p>

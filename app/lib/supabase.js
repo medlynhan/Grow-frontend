@@ -1,8 +1,8 @@
 // backend/server/supabaseClient.js
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = "https://yndrcdpsneyvzkoriscc.supabase.co";  // URL Supabase
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InluZHJjZHBzbmV5dnprb3Jpc2NjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQwMjEwNTUsImV4cCI6MjA2OTU5NzA1NX0.GtJvDfizAUn4LI-QuV_US9YSTMb2S1VbFo3pd-lL_Vo";  // API Key Supabase
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 // Membuat client Supabase
 export const supabase = createClient(supabaseUrl, supabaseKey);
