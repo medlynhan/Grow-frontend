@@ -21,7 +21,7 @@ export default function Home() {
 
 
   return (
-    <div className="container md:flex-row md:py-30 md:px-25 bg-[var(--dark-green)] text-[var(--light-yellow)] items-center min-h-screen">
+    <div className="container md:flex-row md:p-25 bg-[var(--dark-green)] text-[var(--light-yellow)] items-center min-h-screen">
         <div className='flex flex-col pb-2 gap-4 justify-start items-start w-full '>
             <Image src="/Grow.png" alt="irigasi" width={100} height={100} className="xs:w-[10em] md:w-[15em] object-contain z-10" />
             <div className='z-10'>

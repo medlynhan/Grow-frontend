@@ -68,7 +68,7 @@
 @layer components {
 
   .container{
-    @apply flex flex-col gap-10 py-30 px-10 min-w-full items-start justify-start;
+    @apply flex flex-col gap-10 p-15 min-w-full items-start justify-start;
     /* @apply border border-3 border-blue-400; */
   }
 

@@ -227,7 +227,7 @@ export default function Page() {
 
 
   return (
-    <div className='container md:py-30 md:px-25 '>
+    <div className='container md:p-25 '>
       <Navbar />
       {loading && (
       <div className='absolute z-10 top-0 left-0 landscape:top-[10em] w-full text-[var(--dark-green)]  flex flex-col gap-4 justify-center items-center h-full'>
