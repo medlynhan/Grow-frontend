@@ -292,7 +292,7 @@ export default function Page() {
                 <div className='box grid grid-cols-5 bg-transparent p-0 gap-4 text-[var(--dark-green)] h-full  row-span-4 w-full'>
                 
                   <div className='col-span-2 h-full w-full  overflow-hidden '>
-                      <MapboxMap/>
+                      <Image src={'/fieldPhoto.png'} width={200} height={200} className='object-cover object-fit w-full h-full rounded-xl'></Image>
                   </div>
                   
                   <div className='border-2 w-full h-full border-[var(--light-green-2)]  rounded-xl col-span-3 text-[var(--black)]'>         

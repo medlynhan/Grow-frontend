@@ -297,7 +297,7 @@ export default function page() {
                         />
                     </div>
                 </div>
-                <div className='grid grid-cols row-span-1 col-span-2 md:col-span-2 gap-6 w-full  items-center justify-center  h-full'>
+                <div className='relative rounded-xl grid grid-cols row-span-1 col-span-2 md:col-span-2 gap-6 w-full  items-center justify-center  h-full'>
                     <MapboxMap lat1={latitude1} lat2={latitude2} lat3={latitude3} lat4={latitude4} long1={longtitude1} long2={longtitude2} long3={longtitude3} long4={longtitude4}/>
                 </div>
  
